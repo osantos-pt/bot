@@ -12,7 +12,7 @@ namespace bot
     class RateHandler
     {
     public:
-        RateHandler(utils::Curl* curl, utils::PostgreSql* db, const std::string_view& endpoint, const std::string& deviation, const std::vector<std::string>& currencyPairs);
+        RateHandler(utils::Curl* curl, utils::PostgreSql* db, const std::string_view& endpoint, const std::string_view& deviation, const std::vector<std::string>& currencyPairs);
 
         void retrieveAndCheck();
 

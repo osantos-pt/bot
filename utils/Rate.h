@@ -18,15 +18,15 @@ namespace utils
     class RateTracker
     {
     public:
-        explicit RateTracker(const std::string_view& endpoint, std::string_view k, const std::string& deviation) noexcept
-            : m_currencyPair(k)
+        explicit RateTracker(const std::string_view& endpoint, std::string_view currencyPair, const std::string_view& deviation) noexcept
+            : m_currencyPair(currencyPair)
             , m_deviation(deviation)
             , m_initialized(false)
         {
             m_endpoint.append(endpoint).append(m_currencyPair);
         }
 
-        const std::string& getCurrencyPair() const { return m_currencyPair; }
+        const std::string_view& getCurrencyPair() const { return m_currencyPair; }
         const std::string& getEndpoint() const { return m_endpoint; }
         bool isInitialized() const { return m_initialized; }
         const Rate& getBid() const { return m_bid; }
@@ -44,14 +44,14 @@ namespace utils
         }
 
     private:
-        std::string m_currencyPair;
-        std::string m_endpoint;
-        Rate        m_deviation;
-        Rate        m_bidDeviation;
-        Rate        m_askDeviation;
-        Rate        m_bid;
-        Rate        m_ask;
-        bool        m_initialized;
+        std::string_view    m_currencyPair;
+        std::string         m_endpoint;
+        Rate                m_deviation;
+        Rate                m_bidDeviation;
+        Rate                m_askDeviation;
+        Rate                m_bid;
+        Rate                m_ask;
+        bool                m_initialized;
     };
 }
 

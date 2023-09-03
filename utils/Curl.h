@@ -1,6 +1,5 @@
 #ifndef BOT_UTILS_CURL_H
 #define BOT_UTILS_CURL_H
-#include <iostream>
 #include <memory>
 #include <string>
 

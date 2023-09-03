@@ -40,9 +40,9 @@ utils::PostgreSql::~PostgreSql()
 }
 
 
-void utils::PostgreSql::addRun(long interval, const std::string& oscillation)
+void utils::PostgreSql::addRun(long interval, const std::string_view& oscillation)
 {
-    if (!m_impl->m_connection)
+    if (!m_impl || !m_impl->m_connection)
         return;
 
     constexpr auto query = "INSERT INTO run (interval, oscillation) VALUES ($1, $2) RETURNING id"sv;
@@ -51,14 +51,14 @@ void utils::PostgreSql::addRun(long interval, const std::string& oscillation)
     auto strInt = std::to_string(interval);
     const char* paramValues[numParams];
     paramValues[0] = strInt.c_str();
-    paramValues[1] = oscillation.c_str();
+    paramValues[1] = oscillation.data();
 
     m_runId = insertRecord(query, numParams, paramValues);
 }
 
-void utils::PostgreSql::addBaseline(const std::string& currencyPair, const std::string& bid, const std::string& ask)
+void utils::PostgreSql::addBaseline(const std::string_view& currencyPair, const std::string& bid, const std::string& ask)
 {
-    if (!m_impl->m_connection)
+    if (!m_impl ||!m_impl->m_connection)
         return;
 
     constexpr auto query = "INSERT INTO baseline (run, currencyPair, bid, ask) VALUES ($1, $2, $3, $4) RETURNING id"sv;
@@ -66,7 +66,7 @@ void utils::PostgreSql::addBaseline(const std::string& currencyPair, const std::
 
     const char* paramValues[numParams];
     paramValues[0] = m_runId.c_str();
-    paramValues[1] = currencyPair.c_str();
+    paramValues[1] = currencyPair.data();
     paramValues[2] = bid.c_str();
     paramValues[3] = ask.c_str();
 
@@ -77,9 +77,9 @@ void utils::PostgreSql::addBaseline(const std::string& currencyPair, const std::
             std::cerr << "Failed to insert a baseline record (currency pair: " << currencyPair << "; baseline ID: " << baselineId << ")." << std::endl;
 }
 
-void utils::PostgreSql::addOscillation(const std::string& currencyPair, const std::string& rate, char side)
+void utils::PostgreSql::addOscillation(const std::string_view& currencyPair, const std::string& rate, char side)
 {
-    if (!m_impl->m_connection)
+    if (!m_impl ||!m_impl->m_connection)
         return;
 
     constexpr auto query = "INSERT INTO tick (baseline, rate, side) VALUES ($1, $2, $3)"sv;

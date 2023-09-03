@@ -14,7 +14,7 @@ TEST(rate_tracker, basics)
     EXPECT_NO_THROW(RateTracker("https://endpoint/", "", "0.001"));
 
     RateTracker rt("https://endpoint/", "USD-BTC", "0.111");
-    EXPECT_STREQ(rt.getCurrencyPair().c_str(), "USD-BTC");
+    EXPECT_STREQ(rt.getCurrencyPair().data(), "USD-BTC");
     EXPECT_STREQ(rt.getEndpoint().c_str(), "https://endpoint/USD-BTC");
     EXPECT_FALSE(rt.isInitialized());
     EXPECT_EQ(rt.getBid(), Rate("0.0"));
@@ -96,8 +96,8 @@ class MockPostgreSql : public utils::PostgreSql
 public:
     MockPostgreSql() : utils::PostgreSql("host", "port", "user", "password", "name") {}
 
-    MOCK_METHOD(void, addBaseline,      (const std::string& currencyPair, const std::string& bid, const std::string& ask),  (override));
-    MOCK_METHOD(void, addOscillation,   (const std::string& currencyPair, const std::string& rate, char side),              (override));
+    MOCK_METHOD(void, addBaseline,      (const std::string_view& currencyPair, const std::string& bid, const std::string& ask), (override));
+    MOCK_METHOD(void, addOscillation,   (const std::string_view& currencyPair, const std::string& rate, char side),             (override));
 };
 
 class MockCurl : public utils::Curl
@@ -112,8 +112,9 @@ TEST(rate_handler, basics)
 {
     auto endpoint = "https://endpoint/"sv;
     auto oscillation = "0.01"s;
-    auto currencyPair = "EUR-BTC"s;
-    std::vector<std::string> currencyPairs({ currencyPair });
+    auto currencyPair = "EUR-BTC"sv;
+    std::vector<std::string> currencyPairs;
+    currencyPairs.emplace_back(currencyPair);
 
     auto requestUrl = std::string(endpoint).append(currencyPair);
     auto ask = "25931.8733718823"s;

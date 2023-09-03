@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace utils;
 
-bot::RateHandler::RateHandler(utils::Curl* curl, utils::PostgreSql* db, const std::string_view& endpoint, const std::string& deviation, const std::vector<std::string>& currencyPairs)
+bot::RateHandler::RateHandler(utils::Curl* curl, utils::PostgreSql* db, const std::string_view& endpoint, const std::string_view& deviation, const std::vector<std::string>& currencyPairs)
     : m_db(db)
     , m_curl(curl)
 {

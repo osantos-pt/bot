@@ -1,5 +1,6 @@
 #include "utils/Curl.h"
 #include <curl/curl.h>
+#include <iostream>
 
 struct utils::Curl::CurlImpl
 {

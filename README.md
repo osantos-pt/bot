@@ -45,3 +45,11 @@ One can run the whole setup on docker:
 * Start docker-compose containers (bot and database): `docker-compose up -d`
 * Shutdown docker-compose containers: `docker-compose down`
 * Handy single command (shut-down && build && start): `docker-compose down && docker-compose up -d --build`
+
+To check the database one can do:
+* `psql -h 127.0.0.1 -U bot_user  -d bot_db -W`
+* (insert password) `bot_password`
+* Query as needed:
+  * `select * from run;`
+  * `select * from baseline;`
+  * `select * from tick;`

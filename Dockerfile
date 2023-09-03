@@ -1,5 +1,5 @@
 # configurable options
-ARG BUILD_TYPE=Debug
+ARG BUILD_TYPE=Release
 
 FROM ubuntu:22.04 AS bot-image
 RUN set -x                      \
