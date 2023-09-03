@@ -1,0 +1,58 @@
+version: '3'
+services:
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: bot_password
+            POSTGRES_DB: bot_db
+            POSTGRES_USER: bot_user
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+        networks:
+            bot_network:
+                aliases:
+                  - postgres.my.bot.test
+
+    bot:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        depends_on:
+            - postgres
+        environment:
+            - PG_HOST=postgres.my.bot.test
+            - PG_PORT=5432
+            - PG_USER=bot_user
+            - PG_PASSWORD=bot_password
+            - PG_DATABASE=bot_db
+        networks:
+            bot_network:
+#        entrypoint:
+#            - "/app/bot.run"
+#        command:
+#            - "-i"
+#            - "5"
+#            - "-o"
+#            - "0.0001"
+#            - "-c"
+#            - "BTC-USD"
+#            - "-c"
+#            - "USD-BTC"
+        entrypoint:
+            - "./scripts/wait-for-it.sh"
+            - "postgres.my.bot.test:5432"
+            - "--"
+            - "/app/bot.run"
+            - "-i"
+            - "5"
+            - "-o"
+            - "0.0001"
+            - "-c"
+            - "BTC-USD"
+            - "-c"
+            - "USD-BTC"
+
+networks:
+  bot_network:
